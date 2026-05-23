@@ -1,5 +1,7 @@
 package com.grupo_4.MSVC_CPU.services;
 
+import com.grupo_4.MSVC_CPU.exceptions.CpuException;
+import com.grupo_4.MSVC_CPU.exceptions.CpuExceptionHandler;
 import com.grupo_4.MSVC_CPU.models.Cpu;
 import com.grupo_4.MSVC_CPU.dtos.CpuDTO;
 import com.grupo_4.MSVC_CPU.repositories.CpuRepository;
@@ -46,7 +48,7 @@ public class CpuService {
 
     public Cpu buscarPorId(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("CPU no encontrada con ID: " + id));
+                .orElseThrow(() -> new CpuException("CPU no encontrada con ID: " + id));
     }
 
 
