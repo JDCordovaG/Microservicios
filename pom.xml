@@ -32,8 +32,8 @@
 
 	<packaging>pom</packaging>
 	<modules>
-		<module>MSVC-compatibilidad_técnica</module>
-		<module>MSVC-consumo_energético</module>
+		<module>MSVC-compatibilidad_tecnica</module>
+		<module>MSVC-consumo_energetico</module>
 		<module>MSVC-cotizacion</module>
 		<module>MSVC-CPU</module>
 		<module>MSVC-fuente_poder</module>
