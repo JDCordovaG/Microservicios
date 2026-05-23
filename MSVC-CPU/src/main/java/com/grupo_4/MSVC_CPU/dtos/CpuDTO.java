@@ -1,4 +1,4 @@
-package com.grupo_4.MSVC_CPU.models.dtos;
+package com.grupo_4.MSVC_CPU.dtos;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
