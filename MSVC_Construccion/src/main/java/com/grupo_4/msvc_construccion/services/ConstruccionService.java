@@ -1,9 +1,11 @@
 package com.grupo_4.msvc_construccion.services;
 
+import com.grupo_4.msvc_construccion.clients.CPUClient;
 import com.grupo_4.msvc_construccion.dtos.ConstruccionDTO;
 import com.grupo_4.msvc_construccion.exceptions.ConstruccionException;
 import com.grupo_4.msvc_construccion.models.ConstruccionModel;
 import com.grupo_4.msvc_construccion.repositories.ConstruccionRepository;
+import feign.FeignException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -16,13 +18,23 @@ public class ConstruccionService {
 
     private static final Logger log = LoggerFactory.getLogger(ConstruccionService.class);
     private final ConstruccionRepository repository;
+    private final CPUClient cpuClient;
 
-    public ConstruccionService(ConstruccionRepository repository) {
+    public ConstruccionService(ConstruccionRepository repository, CPUClient cpuClient) {
         this.repository = repository;
+        this.cpuClient = cpuClient;
     }
 
     public ConstruccionModel crearConstruccion(ConstruccionDTO dto) {
         log.info("Creando nueva build para el usuario ID: {}", dto.getUsuarioId());
+
+        try {
+            log.info("Llamando al cpu-service para validar existencia del CPU...");
+            cpuClient.obtenerCpuPorId(dto.getCpuId());
+        } catch (FeignException.NotFound e) {
+            throw new ConstruccionException("No se puede crear la Build: El CPU con ID " + dto.getCpuId() + " no existe.");
+        }
+
 
         ConstruccionModel cons = new ConstruccionModel();
         cons.setUsuarioId(dto.getUsuarioId());
