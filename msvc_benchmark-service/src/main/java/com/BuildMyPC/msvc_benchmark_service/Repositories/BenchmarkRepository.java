@@ -9,5 +9,4 @@ import java.util.List;
 @Repository
 public interface BenchmarkRepository extends JpaRepository<Benchmark, Long> {
     List<Benchmark> findByBuildId(Long buildId);
-
 }

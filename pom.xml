@@ -47,6 +47,8 @@
 		<module>msvc_quotation-service</module>
 		<module>msvc_ram-service</module>
 		<module>msvc_user-service</module>
+		<module>msvc-eureka</module>
+		<module>msvc-gateway</module>
 	</modules>
 
 	<dependencies>

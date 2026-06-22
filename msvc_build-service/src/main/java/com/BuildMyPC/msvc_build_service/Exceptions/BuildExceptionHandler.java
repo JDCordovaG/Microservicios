@@ -16,21 +16,19 @@ public class BuildExceptionHandler extends RuntimeException {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errores = new HashMap<>();
-
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String nombreCampo = ((FieldError) error).getField();
             String mensajeError = error.getDefaultMessage();
             errores.put(nombreCampo, mensajeError);
         });
-
         return new ResponseEntity<>(errores, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(BuildExceptionHandler.class)
-    public ResponseEntity<Map<String, String>> handleBuildException(BuildExceptionHandler ex) {
+    // Corregido: Debe capturar BuildException, no la clase Handler
+    @ExceptionHandler(BuildException.class)
+    public ResponseEntity<Map<String, String>> handleBuildException(BuildException ex) {
         Map<String, String> error = new HashMap<>();
         error.put("error", ex.getMessage());
-
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 }

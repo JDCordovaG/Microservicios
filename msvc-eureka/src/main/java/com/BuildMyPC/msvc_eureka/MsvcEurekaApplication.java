@@ -1,0 +1,19 @@
+package com.BuildMyPC.msvc_eureka;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
+
+// @EnableEurekaServer: convierte esta aplicacion en el servidor de descubrimiento.
+// Los demas microservicios se registran aqui y se buscan entre si por su nombre.
+
+@EnableEurekaServer
+@SpringBootApplication
+public class MsvcEurekaApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(MsvcEurekaApplication.class, args);
+	}
+
+}

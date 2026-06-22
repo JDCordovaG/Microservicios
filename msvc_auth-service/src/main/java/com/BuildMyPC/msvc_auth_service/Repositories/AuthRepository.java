@@ -5,9 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AuthRepository extends JpaRepository<Auth, Long> {
     List<Auth> findByEstado(String estado);
-
+    Optional<Auth> findByEmail(String email); // Agregado para validar duplicados y buscar por correo
 }

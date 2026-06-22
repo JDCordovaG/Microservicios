@@ -1,0 +1,210 @@
+spring:
+  application:
+    name: msvc-gateway
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          # Cada ruta: si la URL entra por el patron 'predicates', el gateway la reenvia
+          # a 'uri'. lb:// significa "busca este nombre en Eureka y balancea la carga".
+          routes:
+            - id: msvc_auth-service
+              uri: lb://msvc_auth-service
+              predicates:
+                - Path=/api/v1/auths/**,/api/v2/auths/**
+
+            - id: msvc_benchmark-service
+              uri: lb://msvc_benchmark-service
+              predicates:
+                - Path=/api/v1/benchmarks/**,/api/v2/benchmarks/**
+
+            - id: msvc_build-service
+              uri: lb://msvc_build-service
+              predicates:
+                - Path=/api/v1/builds/**,/api/v2/builds/**
+
+            - id: msvc_compatibility-service
+              uri: lb://msvc_compatibility-service
+              predicates:
+                - Path=/api/v1/compatibilities/**,/api/v2/compatibilities/**
+
+            - id: msvc_component-service
+              uri: lb://msvc_component-service
+              predicates:
+                - Path=/api/v1/components/**,/api/v2/components/**
+
+            - id: msvc_cpu-service
+              uri: lb://msvc_cpu-service
+              predicates:
+                - Path=/api/v1/cpus/**,/api/v2/cpus/**
+
+            - id: msvc_gpu-service
+              uri: lb://msvc_gpu-service
+              predicates:
+                - Path=/api/v1/gpus/**,/api/v2/gpus/**
+
+            - id: msvc_motherboard-service
+              uri: lb://msvc_motherboard-service
+              predicates:
+                - Path=/api/v1/placas_madre/**,/api/v2/placas_madre/**
+
+            - id: msvc_power-supply-service
+              uri: lb://msvc_power-supply-service
+              predicates:
+                - Path=/api/v1/fuentes_poder/**,/api/v2/fuentes_poder/**
+
+            - id: msvc_quotation-service
+              uri: lb://msvc_quotation-service
+              predicates:
+                - Path=/api/v1/quotations/**,/api/v2/quotations/**
+
+            - id: msvc_ram-service
+              uri: lb://msvc_ram-service
+              predicates:
+                - Path=/api/v1/rams/**,/api/v2/rams/**
+
+            - id: msvc_user-service
+              uri: lb://msvc_user-service
+              predicates:
+                - Path=/api/v1/users/**,/api/v2/users/**
+
+
+            # Rutas para el OpenAPI (JSON) de cada microservicio. El Swagger UI del gateway
+            # las consume. Usan el prefijo /api-docs/<svc> (NO /v3/api-docs) para no chocar con
+            # el /v3/api-docs propio del gateway. RewritePath lo traduce al /v3/api-docs real del servicio.
+            - id: auths-api-docs
+              uri: lb://msvc_auth-service
+              predicates:
+                - Path=/api-docs/auths
+              filters:
+                - RewritePath=/api-docs/auths, /v3/api-docs
+
+            - id: benchmarks-api-docs
+              uri: lb://msvc_benchmark-service
+              predicates:
+                - Path=/api-docs/benchmarks
+              filters:
+                - RewritePath=/api-docs/benchmarks, /v3/api-docs
+
+            - id: builds-api-docs
+              uri: lb://msvc_build-service
+              predicates:
+                - Path=/api-docs/builds
+              filters:
+                - RewritePath=/api-docs/builds, /v3/api-docs
+
+            - id: compatibilities-api-docs
+              uri: lb://msvc_compatibility-service
+              predicates:
+                - Path=/api-docs/compatibilities
+              filters:
+                - RewritePath=/api-docs/compatibilities, /v3/api-docs
+
+            - id: components-api-docs
+              uri: lb://msvc_component-service
+              predicates:
+                - Path=/api-docs/components
+              filters:
+                - RewritePath=/api-docs/components, /v3/api-docs
+
+            - id: cpus-api-docs
+              uri: lb://msvc_cpu-service
+              predicates:
+                - Path=/api-docs/cpus
+              filters:
+                - RewritePath=/api-docs/cpus, /v3/api-docs
+
+            - id: gpus-api-docs
+              uri: lb://msvc_gpu-service
+              predicates:
+                - Path=/api-docs/gpus
+              filters:
+                - RewritePath=/api-docs/gpus, /v3/api-docs
+
+            - id: placas_madre-api-docs
+              uri: lb://msvc_motherboard-service
+              predicates:
+                - Path=/api-docs/placas_madre
+              filters:
+                - RewritePath=/api-docs/placas_madre, /v3/api-docs
+
+            - id: fuentes_poder-api-docs
+              uri: lb://msvc_power-supply-service
+              predicates:
+                - Path=/api-docs/fuentes_poder
+              filters:
+                - RewritePath=/api-docs/fuentes_poder, /v3/api-docs
+
+            - id: quotations-api-docs
+              uri: lb://msvc_quotation-service
+              predicates:
+                - Path=/api-docs/quotations
+              filters:
+                - RewritePath=/api-docs/quotations, /v3/api-docs
+
+            - id: rams-api-docs
+              uri: lb://msvc_ram-service
+              predicates:
+                - Path=/api-docs/rams
+              filters:
+                - RewritePath=/api-docs/rams, /v3/api-docs
+
+            - id: users-api-docs
+              uri: lb://msvc_user-service
+              predicates:
+                - Path=/api-docs/users
+              filters:
+                - RewritePath=/api-docs/users, /v3/api-docs
+
+# Punto de entrada unico: todo el trafico entra por aqui.
+server:
+  port: 8080
+
+# El gateway tambien es cliente Eureka para poder resolver los lb://
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+# Swagger UI agregado: una sola pagina con un desplegable para elegir el microservicio.
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /docs/swagger-ui.html
+    # El desplegable apunta a los docs de cada servicio (ruteados por el gateway via lb://).
+    urls:
+      - name: auths
+        url: /api-docs/auths
+
+      - name: benchmarks
+        url: /api-docs/benchmarks
+
+      - name: builds
+        url: /api-docs/builds
+
+      - name: compatibilities
+        url: /api-docs/compatibilities
+
+      - name: components
+        url: /api-docs/components
+
+      - name: cpus
+        url: /api-docs/cpus
+
+      - name: gpus
+        url: /api-docs/gpus
+
+      - name: placas_madre
+        url: /api-docs/placas_madre
+
+      - name: fuentes_poder
+        url: /api-docs/fuentes_poder
+
+      - name: quotations
+        url: /api-docs/quotations
+
+      - name: rams
+        url: /api-docs/rams
+
+      - name: users
+        url: /api-docs/users

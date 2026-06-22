@@ -2,11 +2,7 @@ package com.BuildMyPC.msvc_auth_service.Models.Dtos;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.time.LocalDate;
 
 @Data
 public class AuthDTO {
@@ -20,15 +16,4 @@ public class AuthDTO {
 
     @NotBlank(message = "El campo rol no puede estar vacio")
     private String rol;
-
-    @NotBlank(message = "El campo estado no puede estar vacio")
-    private String estado;
-
-    @NotNull(message = "El campo fechaCreacion es obligatoria")
-    private LocalDate fechaCreacion;
-
-    @NotNull(message = "El campo ultimoLogin es obligatoria")
-    @DateTimeFormat
-    private LocalDate ultimoLogin;
-
 }
