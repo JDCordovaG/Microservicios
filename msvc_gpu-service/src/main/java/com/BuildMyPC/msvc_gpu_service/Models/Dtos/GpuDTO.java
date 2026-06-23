@@ -3,12 +3,18 @@ package com.BuildMyPC.msvc_gpu_service.Models.Dtos;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class GpuDTO {
 
-    @NotNull(message = "El ID del componente es obligatorio")
+    private Long id;
+
+    @NotNull(message = "El ID del componente base es obligatorio")
     private Long componenteId;
 
     @NotNull(message = "La cantidad de VRAM es obligatoria")
@@ -19,16 +25,18 @@ public class GpuDTO {
     private String tipoMemoria;
 
     @NotNull(message = "El TDP es obligatorio")
-    @Positive(message = "El TDP debe ser mayor a 0")
+    @Positive(message = "El TDP (consumo energético) debe ser mayor a 0")
     private Integer tdpWatts;
 
     @NotNull(message = "El largo físico (mm) es obligatorio")
-    @Positive(message = "El largo de la GPU debe ser positivo")
+    @Positive(message = "El largo de la GPU debe ser positivo para calcular colisiones en el gabinete")
     private Double largoMm;
 
-    @NotNull(message = "El puntaje base es obligatorio")
+    @NotNull(message = "El puntaje base de rendimiento es obligatorio")
     private Integer puntajeBase;
 
-    @NotBlank(message = "El fabricante del chip es obligatorio")
+    @NotBlank(message = "El fabricante del chip (NVIDIA, AMD, Intel) es obligatorio")
     private String fabricanteChip;
+
+    private Boolean activo;
 }

@@ -25,7 +25,7 @@ public class DetalleCompatibility {
     private String regla;
 
     @Column(nullable = false)
-    private String resultado; // Ej: "CUMPLE", "NO_CUMPLE"
+    private String resultado;
 
     @Column(nullable = false)
     private String mensaje;

@@ -1,14 +1,17 @@
 package com.BuildMyPC.msvc_power_supply_service.Models;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
-@NoArgsConstructor
 @Entity
 @Table(name = "fuentes_poder")
-
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 public class Powersupply {
 
     @Id
@@ -31,6 +34,9 @@ public class Powersupply {
     @Column(nullable = false, name = "es_modular_fuentepoder")
     private Boolean esModular;
 
-    @Column(nullable = false, name = "estado_fuentepoder")
-    private String estado;
+    @Column(nullable = false)
+    private Boolean activo;
+
+    @Embedded
+    private Audit audit = new Audit();
 }

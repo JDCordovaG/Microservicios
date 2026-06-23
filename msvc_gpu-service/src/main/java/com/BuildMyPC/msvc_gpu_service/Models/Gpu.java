@@ -1,12 +1,17 @@
 package com.BuildMyPC.msvc_gpu_service.Models;
-import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 @Entity
 @Table(name = "gpus")
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 public class Gpu {
 
     @Id
@@ -36,5 +41,8 @@ public class Gpu {
     private String fabricanteChip;
 
     @Column(nullable = false)
-    private String estado;
+    private Boolean activo;
+
+    @Embedded
+    private Audit audit = new Audit();
 }

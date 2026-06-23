@@ -15,9 +15,7 @@ public class BenchmarkModelAssembler implements RepresentationModelAssembler<Ben
     public EntityModel<Benchmark> toModel(Benchmark benchmark) {
         return EntityModel.of(
                 benchmark,
-                // Enlace self al propio recurso v2
                 linkTo(methodOn(BenchmarkControllerV2.class).buscarPorId(benchmark.getId())).withSelfRel(),
-                // Enlace al listado histórico de simulaciones de esa misma configuración de PC
                 linkTo(methodOn(BenchmarkControllerV2.class).listarPorBuild(benchmark.getBuildId())).withRel("historial-build")
         );
     }

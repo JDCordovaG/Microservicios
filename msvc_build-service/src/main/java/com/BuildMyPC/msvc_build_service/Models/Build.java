@@ -43,7 +43,6 @@ public class Build {
     @Column(nullable = false, name = "fecha_actualizacion")
     private LocalDateTime fechaActualizacion;
 
-    // Se elimina la asignación manual de fechaCalculo y se delega a la auditoría embebida
     @Embedded
     private Audit audit = new Audit();
 }

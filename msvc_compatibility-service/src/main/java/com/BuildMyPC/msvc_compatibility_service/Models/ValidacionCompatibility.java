@@ -23,7 +23,7 @@ public class ValidacionCompatibility {
     private Long buildId;
 
     @Column(nullable = false)
-    private Boolean compatible; // Mejorado a Boolean para facilitar la lógica
+    private Boolean compatible;
 
     @Column(nullable = false, name = "consumo_estimado_watts")
     private Integer consumoEstimadoWatts;
@@ -46,7 +46,6 @@ public class ValidacionCompatibility {
         detalle.setValidacion(this);
     }
 
-    // Se elimina la asignación manual de fechaCalculo y se delega a la auditoría embebida
     @Embedded
     private Audit audit = new Audit();
 }

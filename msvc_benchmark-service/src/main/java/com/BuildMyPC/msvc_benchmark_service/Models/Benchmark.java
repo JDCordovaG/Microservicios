@@ -31,7 +31,6 @@ public class Benchmark {
     @Column(nullable = false, length = 50)
     private String categoriaUso;
 
-    // Se elimina la asignación manual de fechaCalculo y se delega a la auditoría embebida
     @Embedded
     private Audit audit = new Audit();
 }

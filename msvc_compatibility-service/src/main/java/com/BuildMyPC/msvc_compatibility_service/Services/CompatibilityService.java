@@ -20,7 +20,6 @@ public class CompatibilityService {
     private static final Logger log = LoggerFactory.getLogger(CompatibilityService.class);
     private final CompatibilityRepository repository;
 
-    // Inyección de todos los clientes Feign
     private final CpuClient cpuClient;
     private final GpuClient gpuClient;
     private final MotherboardClient motherboardClient;
@@ -42,14 +41,12 @@ public class CompatibilityService {
     public ValidacionCompatibility crearValidacion(CompatibilityRequestDTO dto) {
         log.info("Iniciando validación de compatibilidad real para buildId: {}", dto.getBuildId());
 
-        // Limpiar validaciones previas de esta misma build
         repository.findByBuildId(dto.getBuildId()).ifPresent(repository::delete);
 
         ValidacionCompatibility validacion = new ValidacionCompatibility();
         validacion.setBuildId(dto.getBuildId());
 
         try {
-            // 1. Obtener datos técnicos reales de los demás microservicios
             CpuDTO cpu = cpuClient.findById(dto.getCpuId());
             GpuDTO gpu = gpuClient.findById(dto.getGpuId());
             MotherboardDTO mobo = motherboardClient.findById(dto.getMotherboardId());
@@ -58,7 +55,6 @@ public class CompatibilityService {
 
             boolean isCompatible = true;
 
-            // --- REGLA 1: COMPATIBILIDAD DE SOCKET CPU / MOTHERBOARD ---
             DetalleCompatibility reglaSocket = new DetalleCompatibility();
             reglaSocket.setRegla("Compatibilidad de Socket CPU/Motherboard");
             if (cpu.getSocket().equalsIgnoreCase(mobo.getSocket())) {
@@ -71,7 +67,6 @@ public class CompatibilityService {
             }
             validacion.addDetalle(reglaSocket);
 
-            // --- REGLA 2: COMPATIBILIDAD DE MEMORIA RAM ---
             DetalleCompatibility reglaRam = new DetalleCompatibility();
             reglaRam.setRegla("Compatibilidad Tipo de Memoria RAM");
             if (ram.getTipoDdr().equalsIgnoreCase(mobo.getTipoRamSoportada())) {
@@ -84,7 +79,6 @@ public class CompatibilityService {
             }
             validacion.addDetalle(reglaRam);
 
-            // --- REGLA 3: CAPACIDAD MÁXIMA DE RAM ---
             DetalleCompatibility reglaMaxRam = new DetalleCompatibility();
             reglaMaxRam.setRegla("Capacidad Máxima de Memoria RAM");
             if (ram.getCapacidadGb() <= mobo.getMaxRamGb()) {
@@ -97,14 +91,12 @@ public class CompatibilityService {
             }
             validacion.addDetalle(reglaMaxRam);
 
-            // --- REGLA 4: CONSUMO Y FUENTE DE PODER ---
             int consumoEstimado = cpu.getTdpWatts() + gpu.getTdpWatts() + 50; // +50W para placa, ssd, fans
             int margenSeguridad = psu.getPotenciaWatts() - consumoEstimado;
 
             DetalleCompatibility reglaFuente = new DetalleCompatibility();
             reglaFuente.setRegla("Capacidad de Fuente de Poder (TDP)");
 
-            // Requerimos que la fuente tenga al menos 100W de sobra sobre el consumo estimado
             if (margenSeguridad >= 100) {
                 reglaFuente.setResultado("CUMPLE");
                 reglaFuente.setMensaje("La fuente soporta el consumo estimado de " + consumoEstimado + "W con margen suficiente.");
@@ -115,7 +107,6 @@ public class CompatibilityService {
             }
             validacion.addDetalle(reglaFuente);
 
-            // Setear datos finales del registro general
             validacion.setCompatible(isCompatible);
             validacion.setConsumoEstimadoWatts(consumoEstimado);
             validacion.setMargenFuente(margenSeguridad + "W");

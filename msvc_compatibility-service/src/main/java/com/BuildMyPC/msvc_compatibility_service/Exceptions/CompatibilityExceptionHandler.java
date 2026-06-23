@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 
-// CORRECCIÓN: Un ControllerAdvice no debe extender de RuntimeException
 @RestControllerAdvice
 public class CompatibilityExceptionHandler extends RuntimeException {
 
@@ -27,7 +26,6 @@ public class CompatibilityExceptionHandler extends RuntimeException {
         return new ResponseEntity<>(errores, HttpStatus.BAD_REQUEST);
     }
 
-    // CORRECCIÓN: Debe capturar CompatibilityException, no la clase handler
     @ExceptionHandler(CompatibilityException.class)
     public ResponseEntity<Map<String, String>> handleCompatibilityException(CompatibilityException ex) {
         Map<String, String> error = new HashMap<>();

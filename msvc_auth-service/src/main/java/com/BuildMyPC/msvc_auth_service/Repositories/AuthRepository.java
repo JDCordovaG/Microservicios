@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface AuthRepository extends JpaRepository<Auth, Long> {
     List<Auth> findByEstado(String estado);
-    Optional<Auth> findByEmail(String email); // Agregado para validar duplicados y buscar por correo
+    Optional<Auth> findByEmail(String email);
 }

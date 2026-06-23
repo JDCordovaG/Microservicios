@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface ComponentRepository extends JpaRepository<Component, Long> {
     List<Component> findByEstado(String estado);
-
+    List<Component> findByTipo(String tipo);
+    List<Component> findByMarca(String marca);
 }

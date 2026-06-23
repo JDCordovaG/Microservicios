@@ -46,10 +46,8 @@ public class BuildService {
         build.setRamId(dto.getRamId());
         build.setFuenteId(dto.getFuenteId());
 
-        // Se guarda inicialmente como BORRADOR (vía @PrePersist)
         Build guardada = repository.save(build);
 
-        // Flujo integrador: validar compatibilidad
         try {
             Map<String, Object> resultado = compatibilityClient.validarBuild(Map.of(
                     "buildId", guardada.getId(),
@@ -60,7 +58,6 @@ public class BuildService {
                     "fuenteId", guardada.getFuenteId()
             ));
 
-            // Evaluamos la respuesta (Asumiendo que el cliente devuelve una llave "compatible" booleana)
             boolean esCompatible = (boolean) resultado.getOrDefault("compatible", false);
             guardada.setEstado(esCompatible ? "VALIDADA" : "INCOMPATIBLE");
             guardada = repository.save(guardada);
@@ -88,7 +85,6 @@ public class BuildService {
     public Build actualizarBuild(Long id, BuildDTO dto) {
         Build build = buscarPorId(id);
 
-        // Regla implícita: si se cambian componentes, debe volver a evaluarse.
         build.setCpuId(dto.getCpuId());
         build.setGpuId(dto.getGpuId());
         build.setMotherboardId(dto.getMotherboardId());
@@ -104,7 +100,6 @@ public class BuildService {
         log.info("Intentando eliminar Build con ID: {}", id);
         Build build = buscarPorId(id);
 
-        // Validación estricta del caso semestral
         if (!"BORRADOR".equals(build.getEstado())) {
             throw new BuildException("Solo se pueden eliminar o archivar builds en estado BORRADOR.");
         }

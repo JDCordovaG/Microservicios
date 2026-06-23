@@ -31,7 +31,6 @@ public class CompatibilityController {
     public ResponseEntity<Map<String, Object>> crear(@Valid @RequestBody CompatibilityRequestDTO dto) {
         ValidacionCompatibility validacion = service.crearValidacion(dto);
 
-        // Devolvemos el objeto completo más un flag rápido para el build-service
         return new ResponseEntity<>(Map.of(
                 "compatible", validacion.getCompatible(),
                 "validacionId", validacion.getId(),

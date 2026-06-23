@@ -23,7 +23,6 @@ public class AuthControllerV2 {
 
     private final AuthService service;
 
-    // El assembler arma los enlaces HATEOAS de cada auth (ver AuthModelAssembler).
     @Autowired
     private AuthModelAssembler authModelAssembler;
 

@@ -27,7 +27,6 @@ public class BenchmarkExceptionHandler extends RuntimeException {
         return new ResponseEntity<>(errores, HttpStatus.BAD_REQUEST);
     }
 
-    // <-- CORREGIDO: Ahora escucha y recibe la excepción real (BenchmarkException)
     @ExceptionHandler(BenchmarkException.class)
     public ResponseEntity<Map<String, String>> handleBenchmarkException(BenchmarkException ex) {
         Map<String, String> error = new HashMap<>();

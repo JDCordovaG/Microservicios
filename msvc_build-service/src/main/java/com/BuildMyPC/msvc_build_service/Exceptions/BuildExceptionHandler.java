@@ -24,7 +24,6 @@ public class BuildExceptionHandler extends RuntimeException {
         return new ResponseEntity<>(errores, HttpStatus.BAD_REQUEST);
     }
 
-    // Corregido: Debe capturar BuildException, no la clase Handler
     @ExceptionHandler(BuildException.class)
     public ResponseEntity<Map<String, String>> handleBuildException(BuildException ex) {
         Map<String, String> error = new HashMap<>();

@@ -25,7 +25,6 @@ public class AuthService {
     public Auth crearAuth(AuthDTO dto) {
         log.info("Iniciando creación de Auth con email: {}", dto.getEmail());
 
-        // Validación de correo duplicado según requerimiento del caso
         if (repository.findByEmail(dto.getEmail()).isPresent()) {
             log.error("Fallo al crear: El email {} ya existe", dto.getEmail());
             throw new AuthException("Ya existe una cuenta asociada a este correo.");
@@ -33,8 +32,6 @@ public class AuthService {
 
         Auth auth = new Auth();
         auth.setEmail(dto.getEmail());
-        // NOTA: Para cumplir el caso al 100%, aquí deberías inyectar PasswordEncoder y usar:
-        // auth.setPasswordHash(passwordEncoder.encode(dto.getPasswordHash()));
         auth.setPasswordHash(dto.getPasswordHash());
         auth.setRol(dto.getRol());
 
@@ -65,7 +62,6 @@ public class AuthService {
         log.info("Actualizando Auth con ID: {}", id);
         Auth auth = buscarPorId(id);
 
-        // Solo actualiza si el email nuevo no le pertenece a otro usuario
         if (!auth.getEmail().equals(dto.getEmail()) && repository.findByEmail(dto.getEmail()).isPresent()) {
             throw new AuthException("El nuevo correo ya está en uso por otra cuenta.");
         }
