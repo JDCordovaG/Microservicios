@@ -1,0 +1,64 @@
+package com.BuildMyPC.msvc_cpu_service.Services;
+
+import com.BuildMyPC.msvc_cpu_service.Exceptions.CpuException;
+import com.BuildMyPC.msvc_cpu_service.Exceptions.CpuExceptionHandler;
+import com.BuildMyPC.msvc_cpu_service.Models.Cpu;
+import com.BuildMyPC.msvc_cpu_service.Models.Dtos.CpuDTO;
+import com.BuildMyPC.msvc_cpu_service.Repositories.CpuRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+
+public class CpuService {
+
+    private static final Logger log = LoggerFactory.getLogger(CpuService.class);
+    private final CpuRepository repository;
+
+    public CpuService(CpuRepository repository) {
+        this.repository = repository;
+    }
+
+
+    public Cpu crearCpu(CpuDTO dto) {
+        log.info("Iniciando creación de Cpu con socket: {}", dto.getSocket());
+        Cpu cpu = new Cpu();
+        cpu.setComponenteId(dto.getComponenteId());
+        cpu.setSocket(dto.getSocket());
+        cpu.setNucleos(dto.getNucleos());
+        cpu.setHilos(dto.getHilos());
+        cpu.setFrecuenciaBase(dto.getFrecuenciaBase());
+        cpu.setFrecuenciaTurbo(dto.getFrecuenciaTurbo());
+        cpu.setTdpWatts(dto.getTdpWatts());
+        cpu.setSoportaDdr4(dto.getSoportaDdr4());
+        cpu.setSoportaDdr5(dto.getSoportaDdr5());
+        cpu.setEstado("ACTIVO");
+
+        Cpu guardada = repository.save(cpu);
+        log.info("Cpu guardada exitosamente con ID: {}", guardada.getId());
+        return guardada;
+    }
+
+    public List<Cpu> listarTodas() {
+        return repository.findAll();
+    }
+
+    public Cpu buscarPorId(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new CpuException("Cpu no encontrada con ID: " + id));
+    }
+
+
+    public Cpu desactivarCpu(Long id) {
+        log.info("Intentando desactivar Cpu con ID: {}", id);
+        Cpu cpu = buscarPorId(id);
+        cpu.setEstado("INACTIVO");
+        Cpu actualizada = repository.save(cpu);
+        log.info("Cpu desactivada exitosamente");
+        return actualizada;
+    }
+
+}
