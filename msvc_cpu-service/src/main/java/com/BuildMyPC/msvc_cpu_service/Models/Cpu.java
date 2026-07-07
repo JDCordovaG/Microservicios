@@ -12,36 +12,36 @@ public class Cpu {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cpu_id")
     private Long id;
 
-    @Column(nullable = false, name = "componente_id")
+    @Column(name = "componente_id", nullable = false)
     private Long componenteId;
 
-    @Column(nullable = false, name = "socket_cpu")
+    @Column(nullable = false)
     private String socket;
 
-    @Column(nullable = false, name = "nucleos_cpu")
     private Integer nucleos;
-
-    @Column(nullable = false, name = "hilos_cpu")
     private Integer hilos;
 
-    @Column(nullable = false, name = "frecuencia_base_cpu")
+    @Column(name = "frecuencia_base")
     private Double frecuenciaBase;
 
-    @Column(nullable = false, name = "frecuencia_turbo_cpu")
+    @Column(name = "frecuencia_turbo")
     private Double frecuenciaTurbo;
 
-    @Column(nullable = false, name = "tdp_watts_cpu")
+    @Column(name = "tdp_watts", nullable = false)
     private Integer tdpWatts;
 
-    @Column(nullable = false, name = "soporta_ddr4_cpu")
+    private String generacion;
+
+    @Column(name = "soporta_ddr4")
     private Boolean soportaDdr4;
-    @Column(nullable = false, name = "soporta_ddr5_cpu")
+
+    @Column(name = "soporta_ddr5")
     private Boolean soportaDdr5;
 
-    @Column(nullable = false)
-    private String estado;
+    private Boolean activo;
 
+    @Embedded
+    private Audit audit = new Audit();
 }

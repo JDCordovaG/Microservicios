@@ -12,7 +12,7 @@ import java.util.Map;
 
 @RestControllerAdvice
 
-public class MotherboardExceptionHandler {
+public class MotherboardExceptionHandler extends RuntimeException {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {

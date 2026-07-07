@@ -1,14 +1,17 @@
 package com.BuildMyPC.msvc_motherboard_service.Models;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
-@NoArgsConstructor
 @Entity
-@Table(name = "placas madre")
-
+@Table(name = "placas_madre")
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 public class Motherboard {
 
     @Id
@@ -37,6 +40,9 @@ public class Motherboard {
     @Column(nullable = false, name = "formato_placamadre")
     private String formato;
 
-    @Column(nullable = false, name = "estado_placamadre")
-    private String estado;
+    @Column(nullable = false)
+    private Boolean activo; // Baja lógica optimizada
+
+    @Embedded
+    private Audit audit = new Audit();
 }

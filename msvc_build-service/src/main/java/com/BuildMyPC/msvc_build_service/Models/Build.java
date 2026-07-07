@@ -3,8 +3,7 @@ package com.BuildMyPC.msvc_build_service.Models;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -38,10 +37,12 @@ public class Build {
     @Column(nullable = false)
     private String estado;
 
-    @Column(nullable = false, name = "fecha_creacion")
-    private LocalDate fechaCreacion;
+    @Column(nullable = false, name = "fecha_creacion", updatable = false)
+    private LocalDateTime fechaCreacion;
 
     @Column(nullable = false, name = "fecha_actualizacion")
-    private LocalDate fechaActualizacion;
+    private LocalDateTime fechaActualizacion;
 
+    @Embedded
+    private Audit audit = new Audit();
 }

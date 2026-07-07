@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
-public class ComponentExceptionHandler extends RuntimeException {
+public class ComponentExceptionHandler extends RuntimeException{
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
@@ -26,11 +26,11 @@ public class ComponentExceptionHandler extends RuntimeException {
         return new ResponseEntity<>(errores, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(ComponentExceptionHandler.class)
-    public ResponseEntity<Map<String, String>> handleComponentException(ComponentExceptionHandler ex) {
+    @ExceptionHandler(ComponentException.class)
+    public ResponseEntity<Map<String, String>> handleComponentException(ComponentException ex) {
         Map<String, String> error = new HashMap<>();
         error.put("error", ex.getMessage());
 
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 }

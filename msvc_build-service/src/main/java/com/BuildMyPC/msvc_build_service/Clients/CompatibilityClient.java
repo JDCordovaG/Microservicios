@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Map;
 
-@FeignClient(name = "compatibility-service", url = "http://localhost:8088")
+@FeignClient(name = "compatibility-service", url = "localhost:8088")
 public interface CompatibilityClient {
-    @PostMapping("/compatibility/validar")
+    @PostMapping("/api/v1/compatibilities/validar")
     Map<String, Object> validarBuild(@RequestBody Map<String, Object> build);
 }

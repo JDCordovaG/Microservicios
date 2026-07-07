@@ -1,5 +1,6 @@
 package com.BuildMyPC.msvc_compatibility_service.Models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,24 +8,25 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "detacompatibilities")
+@Table(name = "detalle_compatibilidades")
 public class DetalleCompatibility {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "detallecompatibility_id")
+    @Column(name = "detalle_id")
     private Long id;
 
-    @Column(nullable = false, name = "validacion_id_detacompatibilities")
-    private Long validacionId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "validacion_id", nullable = false)
+    @JsonBackReference
+    private ValidacionCompatibility validacion;
 
-    @Column(nullable = false, name = "regla_detacompatibilities")
+    @Column(nullable = false)
     private String regla;
 
-    @Column(nullable = false, name = "resultado_detacompatibilities")
+    @Column(nullable = false)
     private String resultado;
 
-    @Column(nullable = false, name = "mensaje_detacompatibilities")
+    @Column(nullable = false)
     private String mensaje;
-
 }

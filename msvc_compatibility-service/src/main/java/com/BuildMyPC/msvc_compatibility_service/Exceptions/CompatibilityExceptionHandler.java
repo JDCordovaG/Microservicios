@@ -26,11 +26,11 @@ public class CompatibilityExceptionHandler extends RuntimeException {
         return new ResponseEntity<>(errores, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(CompatibilityExceptionHandler.class)
-    public ResponseEntity<Map<String, String>> handleCompatibilityException(CompatibilityExceptionHandler ex) {
+    @ExceptionHandler(CompatibilityException.class)
+    public ResponseEntity<Map<String, String>> handleCompatibilityException(CompatibilityException ex) {
         Map<String, String> error = new HashMap<>();
         error.put("error", ex.getMessage());
 
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 }

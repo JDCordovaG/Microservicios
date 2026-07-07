@@ -26,11 +26,10 @@ public class AuthExceptionHandler extends RuntimeException {
         return new ResponseEntity<>(errores, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(AuthExceptionHandler.class)
-    public ResponseEntity<Map<String, String>> handleAuthException(AuthExceptionHandler ex) {
+    @ExceptionHandler(AuthException.class)
+    public ResponseEntity<Map<String, String>> handleAuthException(AuthException ex) {
         Map<String, String> error = new HashMap<>();
         error.put("error", ex.getMessage());
-
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 }
